@@ -12,8 +12,8 @@ $(".action").click(function() {
         }, 500);
     }
     else {
-        if(newDiv === '#monitor'){
-            getUsers();
+        if(newDiv === '#recentPage'){
+            getRecent();
         }
         else if(newDiv === '#update-user') {
             $('#ubio').val('');

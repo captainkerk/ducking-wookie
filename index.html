@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>AWS Demo!</title>
+    <title>Shorten</title>
 
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="./css/custom.css" rel="stylesheet">
@@ -28,17 +28,19 @@
             <ul class="nav navbar-nav">
                 <li id="home" class="action" data-action="#shortenPage"><a href="#">Home</a></li>
                 <li id="about" class="action" data-action="#aboutPage"><a href="#">About</a></li>
+                <li id="recent" class="action" data-action="#recentPage"><a href="#">Recent</a></li>
             </ul>
         </div><!--/.nav-collapse -->
     </div>
 </nav>
 
 <div class="container">
-    <div class="kerk" id="shortenPage">
+    <div class="k" id="shortenPage">
         <form id="shortenUrlForm">
 
-            <p>URL to shorten:</p><input type="text" class="form-control" id="url" name="url">
-
+            <h3>URL to shorten:</h3><input type="text" class="form-control" id="url" name="url">
+            <br>
+            <br>
             <input type="submit" class="btn btn-primary" value="Generate!" id="shortenUrlformbtn"/>
             <br>
             <br>
@@ -51,22 +53,34 @@
         <br>
     </div>
 
-    <div class="" id="aboutPage" hidden>
-        <form id="shortenUrlForm">
+    <div class="k" id="aboutPage" hidden>
 
-            <p>URL to shorten:</p><input type="text" class="form-control" id="url" name="url">
+        <h3>About</h3>
+        <p>An implementation of a URL shortening service that stores the value in an array and uses that position in the array as a key.<p>
+        </br>
+
+        <h3>The Format:</h3>
+        <p>http://shorten.kerkstra.me/a/unique_identifier
+            <br>
+            <br>
+        <p>The position of the key gets encoded to base 36 (i.e. 0-9, a=10, b=11 ... z = 35) and becomes the unique identifier in the URL.
 
 
-        </form>
 
         <br>
         <br>
+    </div>
+
+    <div id="recentPage" hidden>
+        <h1>10 most recent URLs</h1>
+        <div id="recent-urls">
+        </div>
     </div>
 </div> <!-- /container -->
 
 <footer class="footer">
     <div class="container">
-        <p class="text-muted">Copyleft 2015 John Kerkstra - Find this project on <a href="https://github.com/captainkerk/octo-robot-dangerzone">GitHib!</a></p>
+        <p class="text-muted">Copyleft 2015 John Kerkstra - Find this project on <a href="https://github.com/captainkerk/ducking-wookie">GitHib!</a></p>
     </div>
 </footer>
 
@@ -79,7 +93,6 @@
 
 <script>
 
-updateUsersList = [];
 
 $(document).ready(function() {
 
@@ -97,22 +110,23 @@ $(document).ready(function() {
             $('#updateNotificationCenter').html('<div class="alert alert-success">Success! Shortened URL created! Your new URL is:</div>');
 
             var parsed_response = JSON.parse(response);
+            var uri = parsed_response.v;
 
-            var temp = parsed_response.v;
-
-            while(temp.charAt(0) === '0'){
-                temp = temp.substr(1);
+            while(uri.charAt(0) === '0') {
+                uri = uri.substr(1);
             }
 
-            $('#shortenedURL').html('<div class="well well-lg"><h1>http://shorten.kerkstra.me/a/' + temp + '</h1></div>');
+            $('#shortenedURL').html('<div class="well well-lg"><h1>http://shorten.kerkstra.me/a/' + uri + '</h1></div>');
 
         });
     });
+
+    getRecent();
+
 });
 
 //marshall json function
-$.fn.serializeObject = function()
-{
+$.fn.serializeObject = function() {
     var o = {};
     var a = this.serializeArray();
     $.each(a, function() {

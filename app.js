@@ -32,8 +32,15 @@ app.get('/a/:id', function(req, res){
 		totalValue += digitValue;
 	}
 
-	if(urlValueArray[totalValue]){
-		res.redirect(urlValueArray[totalValue]);
+	var url = urlValueArray[totalValue];
+	if(url){
+		if(url.indexOf('http://') || url.indexOf('https://')){
+			res.redirect(urlValueArray[totalValue]);
+		}
+		else {
+			res.redirect('http://' + urlValueArray[totalValue]);
+		}
+
 	}
 	else {
 		res.end('Sorry!');
@@ -74,47 +81,53 @@ app.post('/shorten', function (req, res) {
 	res.end(JSON.stringify({ v : convertedValue.toString() }));
 });
 
-app.get('/add', function (req, res) {
+app.get('/recent', function(req, res) {
 
-	console.log('urls: ' + urlValueArray);
-
-  	var url = 'http://example.com';
-
-	urlValueArray.push(url);
+	length = urlValueArray.length - 1;
+	var resultArray = [];
 
 	var convertedValue = '';
 
-	var position = urlValueArray.length - 1;
-	var convertedValue;
+	for(k = 0; k < 10; k++){
 
-	if(position > 9){
-		var positionValueSplit = position.toString().split('');
+		position = urlValueArray.length - k -1;
+		fixedPosition = urlValueArray.length - k -1;
 
-		console.log(positionValueSplit);
+		if(position > 9){
 
-		for(i = positionValueSplit.length; i > -1; i--){
+			var convertedValue = '';
+			var positionValueSplit = position.toString().split('');
 
-			var divisor = Math.pow(36, i);
-			console.log('divisor' + divisor);
+			for(i = positionValueSplit.length ; i > -1; i--){
 
-			var temp = Math.floor(position / divisor);
-			console.log('temp' + temp);
+				var divisor = Math.pow(36, i);
 
-			position -= (temp * divisor);
+				var temp = Math.floor(position / divisor);
 
-			convertedValue += conversionArray[temp];
+				position -= (temp * divisor);
+
+				convertedValue += conversionArray[temp];
+			}
+
+			while(convertedValue.charAt(0) === '0'){
+				convertedValue = convertedValue.substr(1);
+			}
 		}
-	}
-	else {
-		convertedValue = position;
-	}
+		else {
+			convertedValue = position;
+		}
 
+		var pair = new Object();
 
-	console.log('convertedValue: ' + convertedValue);
-	res.end('v: ' + convertedValue);
+		pair.key = convertedValue;
+		pair.value = urlValueArray[fixedPosition];
+
+		resultArray.push(pair);
+	}
+	res.json({'urls' : resultArray});
+
 
 });
-
 app.get('/css/custom.css', function(req, res){
 	res.sendFile(__dirname + '/css/custom.css');
 });
