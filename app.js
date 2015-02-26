@@ -36,11 +36,9 @@ app.get('/a/:id', function(req, res){
 	if(url){
 		if(url.indexOf('http://') != -1 || url.indexOf('https://') != -1){
 			res.redirect(urlValueArray[totalValue]);
-			console.log('1');
 		}
 		else {
 			res.redirect('http://' + urlValueArray[totalValue]);
-			console.log('2');
 		}
 
 	}
@@ -127,8 +125,6 @@ app.get('/recent', function(req, res) {
 		resultArray.push(pair);
 	}
 	res.json({'urls' : resultArray});
-
-
 });
 app.get('/css/custom.css', function(req, res){
 	res.sendFile(__dirname + '/css/custom.css');
@@ -140,16 +136,6 @@ app.get('/js/actions.js', function(req, res){
 
 app.get('/js/ui-controller.js', function(req, res){
 	res.sendFile(__dirname + '/js/ui-controller.js');
-});
-
-app.get('/hc1', function(req, res){
-    	res.setHeader('Content-Type', 'application/json');
-    	res.end(JSON.stringify({ a: 1 }));
-});
-
-app.get('/hc2', function(req, res){
-        res.setHeader('Content-Type', 'application/json');
-        res.end(JSON.stringify({ b : 1 }));
 });
 
 
