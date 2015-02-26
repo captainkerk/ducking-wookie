@@ -121,6 +121,7 @@ app.get('/recent', function(req, res) {
 
 		pair.key = convertedValue;
 		pair.value = urlValueArray[fixedPosition];
+		pair.position = fixedPosition;
 
 		resultArray.push(pair);
 	}
