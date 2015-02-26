@@ -34,11 +34,13 @@ app.get('/a/:id', function(req, res){
 
 	var url = urlValueArray[totalValue];
 	if(url){
-		if(url.indexOf('http://') || url.indexOf('https://')){
+		if(url.indexOf('http://') != -1 || url.indexOf('https://') != -1){
 			res.redirect(urlValueArray[totalValue]);
+			console.log('1');
 		}
 		else {
 			res.redirect('http://' + urlValueArray[totalValue]);
+			console.log('2');
 		}
 
 	}
